@@ -5,3 +5,5 @@ C:\Users\Itzan\Desktop\C#\MARKETNET_tag_printer\MARKETNET Tag Printer\obj\Debug\
 C:\Users\Itzan\Desktop\C#\MARKETNET_tag_printer\MARKETNET Tag Printer\obj\Debug\MARKETNET Tag Printer.csproj.CoreCompileInputs.cache
 C:\Users\Itzan\Desktop\C#\MARKETNET_tag_printer\MARKETNET Tag Printer\obj\Debug\MARKETNET Tag Printer.exe
 C:\Users\Itzan\Desktop\C#\MARKETNET_tag_printer\MARKETNET Tag Printer\obj\Debug\MARKETNET Tag Printer.pdb
+C:\Users\Itzan\Desktop\C#\MARKETNET_tag_printer\MARKETNET Tag Printer\bin\Debug\RawPrint.dll
+C:\Users\Itzan\Desktop\C#\MARKETNET_tag_printer\MARKETNET Tag Printer\obj\Debug\MARKETNET Tag Printer.csproj.CopyComplete

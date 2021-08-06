@@ -1,8 +1,10 @@
-﻿using System;
+﻿using RawPrint;
+using System;
 using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Printing;
 using System.IO;
+using System.Text;
 
 namespace MARKETNET_Tag_Printer
 {
@@ -41,6 +43,10 @@ namespace MARKETNET_Tag_Printer
                             {
                                 barcode = 71;
                             }
+                            else if (value.Equals("label"))
+                            {
+                                barcode = -1;
+                            }
                             else
                             {
                                 return;
@@ -60,24 +66,17 @@ namespace MARKETNET_Tag_Printer
                 return;
             }
 
+            if (barcode == -1)
+            {
+                printLabel(data);
+                return;
+            }
+
             runZint(data, barcode);
             PrintDocument pd = new PrintDocument();
             pd.PrintPage += pd_PrintPage;
             pd.Print();
             File.Delete(Path.Combine(Path.GetTempPath(), "out.png"));
-        }
-
-        private static void pd_PrintPage(object sender, PrintPageEventArgs ev)
-        {
-            Image img = Image.FromFile(Path.Combine(Path.GetTempPath(), "out.png"));
-            ev.Graphics.DrawImage(img, 0, 0);
-            img.Dispose();
-
-            pages++;
-            if (copies == pages)
-                ev.HasMorePages = false;
-            else
-                ev.HasMorePages = true;
         }
 
         private static void runZint(string data, int barcodeType)
@@ -93,5 +92,33 @@ namespace MARKETNET_Tag_Printer
             p.Start();
             p.WaitForExit();
         }
+
+        private static void pd_PrintPage(object sender, PrintPageEventArgs ev)
+        {
+            Image img = Image.FromFile(Path.Combine(Path.GetTempPath(), "out.png"));
+            ev.Graphics.DrawImage(img, 0, 0);
+            img.Dispose();
+
+            pages++;
+            if (copies == pages)
+                ev.HasMorePages = false;
+            else
+                ev.HasMorePages = true;
+        }
+
+        private static void printLabel(string data)
+        {
+            byte[] pdf = Convert.FromBase64String(data);
+            BinaryWriter writer = new BinaryWriter(File.Open(Path.Combine(Path.GetTempPath(), "out.pdf"), FileMode.Create));
+            writer.Write(pdf);
+            writer.Close();
+
+            PrinterSettings settings = new PrinterSettings();
+            IPrinter printer = new Printer();
+            printer.PrintRawFile(settings.PrinterName, Path.Combine(Path.GetTempPath(), "out.pdf"), "out.pdf");
+
+            File.Delete(Path.Combine(Path.GetTempPath(), "out.pdf"));
+        }
+
     }
 }
